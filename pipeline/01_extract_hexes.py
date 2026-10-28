@@ -5,15 +5,25 @@ Keeps id and geometry, drops the NOAA-normals properties, and adds the hex cente
 Hexes east of 0° longitude (western Pacific) are left out for now; see SPIKE.md.
 """
 import json
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).parent
 LEGACY = ROOT.parent / "data" / "hex50kmWxStations.js"
+LEGACY_COMMIT = "11db8cf"
 OUT = ROOT / "build" / "hexes.geojson"
 
 
+def legacy_text():
+    if LEGACY.exists():
+        return LEGACY.read_text()
+    # Removed from the tree in phase 2; the last commit that had it is the source.
+    return subprocess.run(["git", "show", f"{LEGACY_COMMIT}:data/{LEGACY.name}"], cwd=ROOT,
+                          check=True, capture_output=True, text=True).stdout
+
+
 def main():
-    text = LEGACY.read_text()
+    text = legacy_text()
     legacy = json.loads(text[text.index("{"):text.rstrip().rstrip(";").rindex("}") + 1])
 
     features, skipped = [], 0

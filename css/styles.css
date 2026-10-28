@@ -13,12 +13,9 @@ body {
   bottom: 0;
 }
 
-#slider {
-  height: 10px
-}
-
-.noUi-horizontal .noUi-tooltip {
-  bottom: -275%;
+.slider {
+  height: 10px;
+  margin: 10px 9px 4px;
 }
 
 .noUi-handle {
@@ -108,32 +105,55 @@ h1 {
 }
 
 #ui-controls {
-    width: 176px;
-    padding: 8px 25px 8px 15px;
-    background: rgba(75, 75, 75, 0.8);
+    width: 270px;
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+    padding: 12px 15px;
+    background: rgba(75, 75, 75, 0.85);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     color: whitesmoke;
     position: absolute;
-    top: 100px;
-    left: 20px;
+    top: 70px;
+    left: 15px;
     z-index: 500;
 }
 
-#ui-controls .min {
-    float: left;
-}
-
-#ui-controls .max {
-    float: right;
-    margin-right: -15px;
-}
-
-.year-slider {
-    width: 100%;
-}
-
-label {
-    font-size: 1.1em;
+#ui-controls h2 {
+    font-size: .8em;
     font-weight: bold;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    margin: 16px 0 4px;
+    color: #DBDBDB;
+}
+
+.criterion {
+    padding: 8px 0;
+}
+
+.criterion.off label,
+.criterion.off .value,
+.criterion.off .slider,
+.criterion.off select {
+    opacity: .4;
+}
+
+.criterion label {
+    font-weight: bold;
+    margin-left: 4px;
+}
+
+.criterion .value {
+    float: right;
+}
+
+.criterion select {
+    margin-top: 6px;
+}
+
+#status {
+    margin-top: 10px;
+    font-size: .8em;
+    color: #DBDBDB;
 }

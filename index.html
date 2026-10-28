@@ -33,18 +33,13 @@
   <h1>Goldilocks Zone Finder</h1>
 
   <div id="mapid"></div>
-  <div class="py-3" id="ui-controls">
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="mode" id="avg" value="avg">
-      <label class="form-check-label" for="avg">Avg</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="mode" id="minmax" value="minmax" checked>
-      <label class="form-check-label" for="minmax">Min/Max</label>
-    </div>
-
-    <select id="month" class="form-select form-select-sm mb-2" aria-label="Month Selections">
-      <option value="all" selected>Annual</option>
+  <div id="ui-controls">
+    <select id="season" class="form-select form-select-sm" aria-label="Season">
+      <option value="all" selected>All year</option>
+      <option value="12,1,2">Winter (Dec–Feb)</option>
+      <option value="3,4,5">Spring (Mar–May)</option>
+      <option value="6,7,8">Summer (Jun–Aug)</option>
+      <option value="9,10,11">Fall (Sep–Nov)</option>
       <option value="1">Jan</option>
       <option value="2">Feb</option>
       <option value="3">Mar</option>
@@ -58,7 +53,41 @@
       <option value="11">Nov</option>
       <option value="12">Dec</option>
     </select>
-    <div id="slider"></div>
+
+    <h2>A perfect day is…</h2>
+
+    <div class="criterion">
+      <input class="form-check-input" type="checkbox" id="feels-on" checked>
+      <label for="feels-on">Feels like</label>
+      <span class="value" id="feels-value"></span>
+      <div class="slider" id="feels-slider"></div>
+    </div>
+
+    <div class="criterion">
+      <input class="form-check-input" type="checkbox" id="dew-on" checked>
+      <label for="dew-on">Dew point at most</label>
+      <span class="value" id="dew-value"></span>
+      <div class="slider" id="dew-slider"></div>
+    </div>
+
+    <div class="criterion">
+      <input class="form-check-input" type="checkbox" id="sun-on" checked>
+      <label for="sun-on">Sun at least</label>
+      <span class="value" id="sun-value"></span>
+      <div class="slider" id="sun-slider"></div>
+    </div>
+
+    <div class="criterion">
+      <input class="form-check-input" type="checkbox" id="aqi-on" checked>
+      <label for="aqi-on">Air quality</label>
+      <select id="aqi-max" class="form-select form-select-sm" aria-label="Air quality limit">
+        <option value="50" selected>Good (AQI ≤ 50)</option>
+        <option value="100">Moderate or better (≤ 100)</option>
+        <option value="150">Not unhealthy (≤ 150)</option>
+      </select>
+    </div>
+
+    <div id="status" role="status"></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
@@ -77,7 +106,6 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script src="./vendor/noUiSlider/nouislider.min.js" charset="utf-8"></script>
-  <script src="./data/hex50kmWxStations.js" charset="utf-8"></script>
   <script type="module" src="./js/app.js"></script>
 </body>
 
