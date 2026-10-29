@@ -1,5 +1,5 @@
 // Loads the packed daily data once and scores hexes on request, off the main thread.
-import { dayMonths, score } from "./score.js";
+import { dayMonths, detail, score } from "./score.js";
 
 let data, meta, months;
 
@@ -31,6 +31,11 @@ const ready = (async () => {
 onmessage = async e => {
   await ready;
   if (!data) return;
-  const result = score(data, meta, months, e.data);
-  postMessage({ type: "result", ...result }, [result.perfect.buffer]);
+  const { type, prefs, hex } = e.data;
+  if (type == "score") {
+    const r = score(data, meta, months, prefs);
+    postMessage({ type: "result", ...r }, [r.perfect.buffer, r.hot.buffer, r.cold.buffer, r.excluded.buffer]);
+  } else if (type == "detail") {
+    postMessage({ type: "detail", hex, ...detail(data, meta, months, prefs, hex) });
+  }
 };

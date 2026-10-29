@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { dayMonths, score } from "./score.js";
+import { dayMonths, detail, score } from "./score.js";
 
 const meta = {
   start: "2024-01-30", days: 4, hexes: 2, years: [2024],
@@ -32,6 +32,8 @@ const prefs = (over = {}) => ({
   dew: { on: true, max: 60 },
   sun: { on: true, min: 60 },
   aqi: { on: true, max: 50 },
+  hot: { on: true, temp: 100, days: 10 },
+  cold: { on: true, temp: 10, days: 10 },
   ...over,
 });
 
@@ -67,4 +69,44 @@ test("months filter", () => {
 test("averages over years", () => {
   const r = score(data, { ...meta, years: [2023, 2024] }, months, prefs());
   assert.deepEqual([...r.perfect], [0.5, 0.5]);
+});
+
+test("dealbreakers count hot and cold days over the whole year", () => {
+  const febOnly = allMonths.map((_, m) => m === 1);
+  const r = score(data, meta, months, prefs({
+    months: febOnly,  // the season doesn't limit dealbreakers
+    hot: { on: true, temp: 85, days: 0 },
+    cold: { on: true, temp: 45, days: 0 },
+  }));
+  assert.deepEqual([...r.hot], [1, 0]);   // hex 0 hits 90°F on Jan 31
+  assert.deepEqual([...r.cold], [0, 1]);  // hex 1 drops to 40°F on Jan 30
+  assert.deepEqual([...r.excluded], [1, 1]);
+});
+
+test("dealbreakers allow up to the given number of days, and can be switched off", () => {
+  const r = score(data, meta, months, prefs({
+    hot: { on: true, temp: 85, days: 1 },
+    cold: { on: false, temp: 45, days: 0 },
+  }));
+  assert.deepEqual([...r.excluded], [0, 0]);
+});
+
+test("detail explains what ruins days", () => {
+  const d0 = detail(data, meta, months, prefs(), 0);
+  assert.equal(d0.perfect, 1);
+  assert.deepEqual(d0.fails, { tooHot: .25, tooCool: 0, humid: .25, cloudy: .25, badAir: 0 });
+  assert.deepEqual([...d0.perMonth].slice(0, 3), [1, 0, 0]);
+  assert.deepEqual([...d0.daysInMonth].slice(0, 3), [2, 2, 0]);
+
+  const d1 = detail(data, meta, months, prefs(), 1);
+  assert.deepEqual(d1.fails, { tooHot: 0, tooCool: .25, humid: 0, cloudy: 0, badAir: .5 });
+  assert.equal(d1.aqUnknown, .25);
+});
+
+test("detail month bars cover all months even when a season is selected", () => {
+  const febOnly = allMonths.map((_, m) => m === 1);
+  const d = detail(data, meta, months, prefs({ months: febOnly }), 1);
+  assert.deepEqual([...d.perMonth].slice(0, 2), [0, 1]);
+  assert.equal(d.perfect, 1);
+  assert.deepEqual(d.fails, { tooHot: 0, tooCool: 0, humid: 0, cloudy: 0, badAir: .5 });
 });

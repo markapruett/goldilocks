@@ -82,7 +82,7 @@ h1 {
     height: 22px;
 }
 
-.legend span {
+.legend li span {
     width: 30px;
     height: 20px;
     float: left;
@@ -156,4 +156,241 @@ h1 {
     margin-top: 10px;
     font-size: .8em;
     color: #DBDBDB;
+}
+
+.legend-sub {
+    font-size: .85em;
+}
+
+/* dealbreakers */
+
+.dealbreaker {
+    margin: 4px 0 0 22px;
+    font-size: .9em;
+    line-height: 2;
+}
+
+.dealbreaker input {
+    width: 3.6em;
+    padding: 0 4px;
+    border: 0;
+    border-radius: 3px;
+    font: inherit;
+}
+
+.criterion.off .dealbreaker {
+    opacity: .4;
+}
+
+/* top places */
+
+#top-places {
+    padding-left: 1.6em;
+    margin: 0;
+    font-size: .9em;
+}
+
+#top-places li {
+    padding: 2px 0;
+}
+
+#top-places button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    text-align: left;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+#top-places button:hover {
+    text-decoration-style: solid;
+}
+
+#top-places li span {
+    float: right;
+    font-variant-numeric: tabular-nums;
+}
+
+#top-places .none {
+    list-style: none;
+    margin-left: -1.6em;
+    color: #DBDBDB;
+}
+
+/* hex popup */
+
+.hex-popup {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: #0b0b0b;
+}
+
+.hex-popup h3 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0 0 4px;
+}
+
+.hex-popup h4 {
+    font-size: .75em;
+    font-weight: bold;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #52514e;
+    margin: 12px 0 6px;
+}
+
+.hex-popup .hero {
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.hex-popup .hero span {
+    font-size: .45em;
+    font-weight: normal;
+    color: #52514e;
+}
+
+.hex-popup .ruled-out {
+    margin: 6px 0 0;
+    font-weight: bold;
+    color: #52514e;
+}
+
+.hex-popup .small {
+    font-size: .85em;
+    color: #52514e;
+    margin: 8px 0 0;
+}
+
+.month-bars {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.month-bars line {
+    stroke: #c3c2b7;
+    stroke-width: 1;
+}
+
+.month-bars .bar path {
+    fill: #2a78d6;
+}
+
+.month-bars .bar.out path {
+    fill: #9ec5f4;
+}
+
+.month-bars .bar:hover path {
+    fill: #1c5cab;
+}
+
+.month-bars .bar.out:hover path {
+    fill: #6da7ec;
+}
+
+.month-bars text {
+    font-size: 10px;
+    fill: #898781;
+    text-anchor: middle;
+}
+
+.fails {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: .85em;
+}
+
+.fails li {
+    display: grid;
+    grid-template-columns: 1fr 70px 2.6em;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+}
+
+.fails .track {
+    height: 8px;
+}
+
+.fails .fill {
+    display: block;
+    height: 100%;
+    background: #eb6834;
+    border-radius: 0 4px 4px 0;
+}
+
+.fails .pct {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* mobile */
+
+#panel-toggle {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    h1 {
+        font-size: 1.1em;
+        top: 8px;
+        left: 8px;
+        padding: 6px 10px;
+    }
+
+    #panel-toggle {
+        display: block;
+        position: absolute;
+        z-index: 650;
+        top: 8px;
+        right: 8px;
+        padding: 6px 12px;
+        border: 0;
+        border-radius: 5px;
+        background: rgba(25, 25, 25, 0.8);
+        color: whitesmoke;
+        font: inherit;
+        font-size: .9em;
+    }
+
+    #ui-controls {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: auto;
+        max-height: 50vh;
+        padding: 10px 16px 16px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    #ui-controls.collapsed {
+        display: none;
+    }
+
+    .leaflet-top.leaflet-right .leaflet-control-zoom {
+        display: none;
+    }
+
+    .leaflet-bottom.leaflet-right {
+        bottom: auto;
+        top: 44px;
+    }
+
+    .legend {
+        font-size: .8em;
+        width: 110px;
+    }
+
+    .legend p {
+        display: none;
+    }
 }

@@ -33,6 +33,7 @@
   <h1>Goldilocks Zone Finder</h1>
 
   <div id="mapid"></div>
+  <button id="panel-toggle" type="button" aria-controls="ui-controls" aria-expanded="true">Preferences</button>
   <div id="ui-controls">
     <select id="season" class="form-select form-select-sm" aria-label="Season">
       <option value="all" selected>All year</option>
@@ -86,6 +87,29 @@
         <option value="150">Not unhealthy (≤ 150)</option>
       </select>
     </div>
+
+    <h2>Dealbreakers</h2>
+
+    <div class="criterion">
+      <input class="form-check-input" type="checkbox" id="hot-on" checked>
+      <label for="hot-on">Too hot</label>
+      <div class="dealbreaker">
+        more than <input type="number" id="hot-days" min="0" max="365" value="10" aria-label="Hot days per year">
+        days/yr feeling ≥ <input type="number" id="hot-temp" min="70" max="130" value="100" aria-label="Hot threshold °F">°F
+      </div>
+    </div>
+
+    <div class="criterion">
+      <input class="form-check-input" type="checkbox" id="cold-on" checked>
+      <label for="cold-on">Too cold</label>
+      <div class="dealbreaker">
+        more than <input type="number" id="cold-days" min="0" max="365" value="10" aria-label="Cold days per year">
+        days/yr feeling ≤ <input type="number" id="cold-temp" min="-40" max="50" value="10" aria-label="Cold threshold °F">°F
+      </div>
+    </div>
+
+    <h2>Top places</h2>
+    <ol id="top-places"></ol>
 
     <div id="status" role="status"></div>
   </div>

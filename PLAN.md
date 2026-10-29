@@ -1,6 +1,8 @@
 # Plan: multi-factor "perfect days" Goldilocks
 
-Status: **approved 2026-10-28**. Phase 0 done (see `pipeline/SPIKE.md`). Phase 1 in progress.
+Status: **approved 2026-10-28**. Phase 0 done (see `pipeline/SPIKE.md`). Phases 2–4 built
+and tested against synthetic weather. Phase 1 is waiting on the ERA5 download, then the
+real-data checks.
 
 ## Goal
 
@@ -170,12 +172,15 @@ git-ignored).
      before touching the UI.
    - Measure the ERA5 cool-peak bias against GHCN-Daily stations, and check San Diego's
      sunshine.
-2. **App core**: loader plus worker, the perfect-day criteria panel, map coloring and
+2. **App core** ✅: loader plus worker, the perfect-day criteria panel, map coloring and
    legend. Remove the old data file and the Avg/Min-Max mode.
-3. **Explain & share**: hex popup with month bars and the "what ruins days here" breakdown,
+3. **Explain & share** ✅: hex popup with month bars and the "what ruins days here" breakdown,
    dealbreakers, URL hash state.
-4. **Polish**: top-places list, mobile layout, top-level README covering data sources and
+4. **Polish** ✅: top-places list, mobile layout, top-level README covering data sources and
    method.
+   - The map switched from the Spectral rainbow to a single-hue blue ramp (light = few
+     perfect days), with dealbreaker hexes in neutral grey. A count needs light-to-dark,
+     not a rainbow.
 
 Each phase ends in a working state that you can review before the next one starts.
 
