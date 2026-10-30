@@ -307,7 +307,7 @@ function failRows(d, prefs) {
     [prefs.feels.on, d.fails.tooHot, `Too hot (feels > ${prefs.feels.max}°F)`],
     [prefs.feels.on, d.fails.tooCool, `Too cool (feels < ${prefs.feels.min}°F)`],
     [prefs.dew.on, d.fails.humid, `Too humid (dew point > ${prefs.dew.max}°F)`],
-    [prefs.sun.on, d.fails.cloudy, `Too cloudy (sun < ${prefs.sun.min}%)`],
+    [prefs.sun.on, d.fails.cloudy, `Too cloudy (sunlight < ${prefs.sun.min}%)`],
     [prefs.aqi.on, d.fails.badAir, `Bad air (AQI > ${prefs.aqi.max})`]
   ].filter(r => r[0]).sort((a, b) => b[1] - a[1]);
   if (!rows.length) return '<p class="small">No criteria switched on.</p>';

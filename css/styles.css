@@ -152,6 +152,13 @@ h1 {
     margin-top: 6px;
 }
 
+.criterion .help {
+    margin: 6px 0 0 22px;
+    font-size: .75em;
+    line-height: 1.35;
+    color: #DBDBDB;
+}
+
 #status {
     margin-top: 10px;
     font-size: .8em;

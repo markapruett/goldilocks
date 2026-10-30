@@ -26,7 +26,10 @@ actually happened day to day rather than by smoothed averages.
 | Topic | Decision |
 |---|---|
 | Upstream | This is your own fork. The old normals mode will be removed, not kept as an option. |
-| Weather download | Copernicus CDS (free), run in the background: 70 requests, ~2.5 days. Each request is one variable × one year, under the 400-field size limit. |
+| Weather download | Copernicus CDS (free), run in the background. Each request is one variable × one year, under the 400-field size limit. |
+| Years | **2021–2025 (5 years)**, decided 2026-10-30, when the queue slowed to ~3.5 h per request and 10 years would have run to ~Nov 7. 35 requests. |
+| Coastal hexes | Average only the grid cells centered on US land (county outlines); fall back to the nearest land cell within ~30 km, then to all cells (tiny islands). |
+| Model biases | Not corrected; labeled in the app and README instead. Hot extremes run a few °F cool (the "too hot" dealbreaker has a note), and "Sunlight" is the clear-sky energy share, which runs higher than "% of possible sunshine". |
 | Western Pacific | The 18 hexes east of 0° longitude (Guam, CNMI, Wake, Palau, FSM, Marshall Islands) are left out for now. They can come back later with a second batch of downloads. |
 | Feels-like | `max(T, heat index)` for heat and `min(T, wind chill)` for cold: dry air never makes it "feel cooler" than the actual temperature. |
 
@@ -46,8 +49,8 @@ problems: peaks and valleys are kept, and conditions can be checked together on 
 | Sunshine | ERA5 surface solar radiation (`ssrd`) ÷ clear-sky solar radiation (`ssrdc`), daily sums | Gives "fraction of clear-sky sun that reached the ground". Close in spirit to NWS "% of possible sunshine". |
 | Air quality | [EPA AirData](https://aqs.epa.gov/aqsweb/airdata/FileFormats.html) daily AQI by county | Measured, not modeled. A county's value is its highest-reading monitor that day. Only counties with monitors have data (see "Missing AQ" below). |
 
-Years: **2016–2025** (10 full years). This is a lever if the data turns out too large (see
-"Size").
+Years: originally **2016–2025** (10 full years); cut to **2021–2025** (see "Decisions made
+after approval").
 
 Fallback if ERA5 retrieval is painful: the Open-Meteo historical API (which is also ERA5-based).
 It's simpler, but at 3,331 locations × 10 years it would need a paid month to stay inside rate

@@ -10,14 +10,14 @@ which mapped days within a temperature range using NOAA's 30-year normals.
 ## How it works
 
 The US is covered by 3,313 hexagons, each about 50 km across (lower 48, Alaska, Hawaii,
-Puerto Rico/USVI, American Samoa). For each hex and each day from 2016 to 2025, the data has:
+Puerto Rico/USVI, American Samoa). For each hex and each day from 2021 to 2025, the data has:
 
 | Value | What it is |
 |---|---|
 | Feels-like high | NWS heat index from the day's max temperature and mean dew point; never below the actual temperature |
 | Feels-like low | NWS wind chill from the day's min temperature and mean wind; never above the actual temperature |
 | Dew point | daily mean, the best single measure of mugginess |
-| Sun | share of the clear-sky sunshine that reached the ground |
+| Sunlight | share of the clear-sky sunlight that reached the ground (see caveats) |
 | Air quality | EPA daily AQI for the county, including wildfire smoke |
 
 A day counts as **perfect** when every criterion you've switched on holds that day.
@@ -37,11 +37,19 @@ checks every condition on the same day.
 ### Caveats
 
 - ERA5 is a ~28 km reanalysis grid, not a weather station. Peaks run a few °F cooler
-  than airport readings (Phoenix's July 2024 grid average was 109°F against ~113°F at
-  the airport). Coastal hexes partly average in ocean, and mountain hexes blend
-  valleys and ridges.
-- ERA5 underestimates coastal marine-layer clouds, so the sun along the California
-  coast is probably overstated.
+  than airport readings: Phoenix's July 2024 grid average was 109°F against ~113°F at
+  the airport, and in 2025 the grid had Phoenix feeling ≥ 100°F on 85 days, against
+  100+ real days. The "too hot" dealbreaker is therefore a little lenient in desert
+  cities, and the app says so next to it.
+- Each hex averages only the grid cells centered on US land, so the ocean doesn't drag
+  coastal hexes toward sea temperatures. Coastal land cells still feel some ocean in
+  the model, though: San Diego's July feels-like high comes out ~70°F against ~75°F
+  in reality. Mountain hexes blend valleys and ridges.
+- "Sunlight" is the share of clear-sky solar energy reaching the ground, not the
+  familiar "% of possible sunshine". Thin cloud still lets much of it through, so it
+  runs higher: Seattle's December scores ~40% against ~20–25% possible sunshine.
+  ERA5 also underestimates coastal marine-layer clouds, so the California coast is
+  probably sunnier here than in life.
 - Air quality comes from the county containing the hex center, or the nearest
   monitored county within 75 km. About 6% of hexes have no monitor in range. Their air
   quality isn't judged (it counts as passing), and the hex says so.
@@ -78,7 +86,7 @@ writes `data/days.bin`, `data/hexes.geojson` and `data/meta.json`.
 2. Run the steps in order from `pipeline/`:
    ```sh
    uv run 01_extract_hexes.py   # hex grid (from the original data file in git history)
-   uv run 02_fetch_era5.py      # ~70 requests, one at a time: expect a couple of days
+   uv run 02_fetch_era5.py      # 35 requests, one at a time: expect several days
    uv run 03_fetch_aqi.py       # EPA daily AQI, about a minute
    uv run 04_build_days.py      # grid → hex daily values
    uv run 05_name_hexes.py      # hex names

@@ -73,9 +73,11 @@
 
     <div class="criterion">
       <input class="form-check-input" type="checkbox" id="sun-on" checked>
-      <label for="sun-on">Sun at least</label>
+      <label for="sun-on">Sunlight at least</label>
       <span class="value" id="sun-value"></span>
       <div class="slider" id="sun-slider"></div>
+      <p class="help">Share of clear-sky sunlight reaching the ground. Thin cloud lets a lot through, so
+        this runs higher than the usual "% of possible sunshine": a gray Seattle December still scores ~40%.</p>
     </div>
 
     <div class="criterion">
@@ -97,6 +99,8 @@
         more than <input type="number" id="hot-days" min="0" max="365" value="10" aria-label="Hot days per year">
         days/yr feeling ≥ <input type="number" id="hot-temp" min="70" max="130" value="100" aria-label="Hot threshold °F">°F
       </div>
+      <p class="help">The weather model runs a few °F cooler than airport readings on the hottest days
+        (Phoenix shows ~85 days ≥ 100°F a year, not 100+), so you may want to set this a little lower.</p>
     </div>
 
     <div class="criterion">

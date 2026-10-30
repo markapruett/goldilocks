@@ -5,8 +5,8 @@ Uses every year for which all fields from 02 are downloaded, so it can run on a
 partial download. Output: build/days.npz with float32 [hex, day] arrays
 feels_high, feels_low, dewpt (°F) and sun (0–1), plus `dates` (ISO strings).
 
-Values are computed per grid cell, then averaged over the cells whose centers fall
-inside the hex (or the nearest cell, for hexes too small or coastal to contain one).
+Values are computed per grid cell, then averaged over the land cells whose centers
+fall inside the hex (see hex_cells for coastal and island fallbacks).
 """
 import json
 import time
@@ -25,6 +25,7 @@ from feelslike import feels_high, feels_low
 ROOT = Path(__file__).parent
 fetch = import_module("02_fetch_era5")
 ERA5 = fetch.OUT
+COAST_DEG = 0.3  # ~30 km: how far a coastal hex may reach for a land cell
 
 
 def k_to_f(k):
@@ -36,18 +37,41 @@ def complete_years():
 
 
 def hex_cells(hexes, lat, lon):
-    """Per hex, the flat grid indices of the cells to average."""
+    """Per hex, the flat grid indices of the cells to average.
+
+    Only cells centered on US land count, so coastal hexes aren't cooled (or warmed)
+    by the ocean. A hex with no land cell inside takes the nearest land cell within
+    COAST_DEG of its center, and failing that, every cell inside it.
+    """
     glon, glat = np.meshgrid(lon, lat)
-    pts = points(glon.ravel(), glat.ravel())
-    tree = STRtree(pts)
-    cells = []
-    for f in hexes:
-        poly = shape(f["geometry"])
-        inside = tree.query(poly, predicate="contains")
-        if len(inside) == 0:
-            p = f["properties"]
-            inside = [int(np.argmin((glat.ravel() - p["lat"]) ** 2 + (glon.ravel() - p["lon"]) ** 2))]
-        cells.append(np.asarray(inside))
+    flat_lat, flat_lon = glat.ravel(), glon.ravel()
+    tree = STRtree(points(flat_lon, flat_lat))
+    inside = [tree.query(shape(f["geometry"]), predicate="contains") for f in hexes]
+
+    # Land test only for cells near a hex, against the county outlines from step 03.
+    _, counties = import_module("03_fetch_aqi").load_counties()
+    near = np.unique(np.concatenate(inside + [tree.query(shape(f["geometry"]).buffer(COAST_DEG)) for f in hexes]))
+    pt_idx, _ = STRtree(counties).query(points(flat_lon[near], flat_lat[near]), predicate="within")
+    land = np.zeros(flat_lat.size, dtype=bool)
+    land[near[pt_idx]] = True
+    land_idx = np.flatnonzero(land)
+
+    cells, stats = [], {"land": 0, "nearby land": 0, "all cells": 0}
+    for f, ins in zip(hexes, inside):
+        on_land = ins[land[ins]]
+        if len(on_land):
+            cells.append(on_land)
+            stats["land"] += 1
+            continue
+        p = f["properties"]
+        d2 = (flat_lat[land_idx] - p["lat"]) ** 2 + ((flat_lon[land_idx] - p["lon"]) * np.cos(np.radians(p["lat"]))) ** 2
+        if len(land_idx) and d2.min() <= COAST_DEG ** 2:
+            cells.append(land_idx[[int(d2.argmin())]])
+            stats["nearby land"] += 1
+        else:
+            cells.append(ins if len(ins) else np.array([int(np.argmin((flat_lat - p["lat"]) ** 2 + (flat_lon - p["lon"]) ** 2))]))
+            stats["all cells"] += 1
+    print("hexes averaged over: " + ", ".join(f"{v} {k}" for k, v in stats.items()))
     return cells
 
 
