@@ -1,0 +1,28 @@
+{
+ "start": "2022-01-01",
+ "days": 1461,
+ "hexes": 3313,
+ "years": [
+  2022,
+  2023,
+  2024,
+  2025
+ ],
+ "planes": [
+  "feelsHigh",
+  "feelsLow",
+  "dewPoint",
+  "sunAqi"
+ ],
+ "tempOffset": 60,
+ "sunSteps": 15,
+ "aqiEdges": [
+  50,
+  75,
+  100,
+  150,
+  200
+ ],
+ "aqiUnknown": 15,
+ "sources": "ERA5 daily statistics (Copernicus CDS), EPA AirData daily AQI, GeoNames"
+}

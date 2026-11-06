@@ -10,7 +10,7 @@ which mapped days within a temperature range using NOAA's 30-year normals.
 ## How it works
 
 The US is covered by 3,313 hexagons, each about 50 km across (lower 48, Alaska, Hawaii,
-Puerto Rico/USVI, American Samoa). For each hex and each day from 2021 to 2025, the data has:
+Puerto Rico/USVI, American Samoa). For each hex and each day from 2022 to 2025 (2021 is still to be added), the data has:
 
 | Value | What it is |
 |---|---|

@@ -1,8 +1,25 @@
 # Plan: multi-factor "perfect days" Goldilocks
 
 Status: **approved 2026-10-28**. Phase 0 done (see `pipeline/SPIKE.md`). Phases 2–4 built
-and tested against synthetic weather. Phase 1 is waiting on the ERA5 download, then the
-real-data checks.
+and tested. Phase 1 is waiting on the last year of the ERA5 download, then the real-data
+checks.
+
+### Handoff (2026-11-06, moving off the old machine)
+
+- `data/` is committed and built from **2022–2025** (4 complete years, 19 MB `days.bin`), so
+  the app works from a fresh clone.
+- The ERA5 download stopped at **29 of 35 files**. Missing: 6 of the 7 fields for **2021** (only
+  `tmax` was done). All 29 downloaded files (3.7 GB) exist only on the old machine.
+- The raw files in `pipeline/raw/era5/us/` are git-ignored. `04_build_days.py` needs the raw
+  files for every year it builds, so adding 2021 means having all 35 on one machine: copy the
+  29 over first, then `02_fetch_era5.py` fetches only the 6 missing ones. Without the copy it
+  fetches all 35 again (~3 h each, several days).
+- The fetcher can hang silently after the server finishes a job (it did on 2026-11-01 and
+  lost ~4 days). If `fetch.log` hasn't moved in many hours, check the job list; restarting
+  is safe, since it reattaches to queued or finished jobs. CDS deletes finished results after a
+  few days.
+- Still open: looser default dealbreakers (most of the map is ruled out with the current
+  defaults), hosting for `days.bin` (24 MB at 5 years), and the open questions at the end.
 
 ## Goal
 
